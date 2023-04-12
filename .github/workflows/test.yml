@@ -1,4 +1,4 @@
-name: ci-test
+name: Run unit tests
 
 on:
   push:
@@ -8,15 +8,16 @@ on:
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
 
     services:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_DB: simple_bank
           POSTGRES_USER: root
           POSTGRES_PASSWORD: secret
+          POSTGRES_DB: simple_bank
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
