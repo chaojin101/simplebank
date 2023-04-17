@@ -75,7 +75,7 @@ func runGrpcServer(config util.Config, store db.Store) {
 		log.Fatal().Msgf("cannot create listener: %s", err)
 	}
 
-	log.Printf("start gRPC server at %s", listener.Addr().String())
+	log.Info().Msgf("start gRPC server at %s", listener.Addr().String())
 	err = grpcServer.Serve(listener)
 	if err != nil {
 		log.Fatal().Msgf("cannot start gRPC server")
@@ -121,8 +121,11 @@ func runGatewayServer(config util.Config, store db.Store) {
 		log.Fatal().Msgf("cannot create listener: %s", err)
 	}
 
-	log.Printf("start HTTP gateway server at %s", listener.Addr().String())
-	err = http.Serve(listener, mux)
+	log.Info().Msgf("start HTTP gateway server at %s", listener.Addr().String())
+
+	handler := gapi.HttpLogger(mux)
+
+	err = http.Serve(listener, handler)
 	if err != nil {
 		log.Fatal().Msgf("cannot start HTTP gateway server: %s", err)
 	}
